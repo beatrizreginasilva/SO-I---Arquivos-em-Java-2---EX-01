@@ -1,0 +1,67 @@
+package controller;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
+
+public class FifaController implements IFifaController {
+
+    @Override
+    public Stack<String> empilhaBrasileiros(String caminho, String nome) throws IOException {
+        Stack<String> pilha = new Stack<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(caminho + "\\" + nome))) {
+            String linha = br.readLine(); // Ignora a primeira linha (cabeçalho)
+            while ((linha = br.readLine()) != null) {
+                String[] dados = linha.split(",");
+                if ("Brazil".equals(dados[/*índice da coluna de nacionalidade*/])) {
+                    pilha.push(linha);
+                }
+            }
+        }
+        return pilha;
+    }
+
+    @Override
+    public void desmpilhaBonsBrasileiros(Stack<String> pilha) {
+        while (!pilha.isEmpty()) {
+            String jogador = pilha.pop();
+            String[] dados = jogador.split(",");
+            int overall = Integer.parseInt(dados[/*índice da coluna Overall*/]);
+            if (overall > 80) {
+                System.out.println("Nome: " + dados[/*índice do nome*/] + ", Overall: " + overall);
+            }
+        }
+    }
+
+    @Override
+    public List<String> listaRevelacoes(String caminho, String nome) throws IOException {
+        List<String> lista = new LinkedList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(caminho + "\\" + nome))) {
+            String linha = br.readLine(); // Ignora a primeira linha (cabeçalho)
+            while ((linha = br.readLine()) != null) {
+                String[] dados = linha.split(",");
+                int idade = Integer.parseInt(dados[/*índice da coluna idade*/]);
+                if (idade <= 20) {
+                    lista.add(linha);
+                }
+            }
+        }
+        return lista;
+    }
+
+    @Override
+    public void buscaListaBonsJovens(List<String> lista) {
+        for (int i = lista.size() - 1; i >= 0; i--) {
+            String jogador = lista.get(i);
+            String[] dados = jogador.split(",");
+            int overall = Integer.parseInt(dados[/*índice da coluna Overall*/]);
+            int idade = Integer.parseInt(dados[/*índice da coluna idade*/]);
+            if (overall > 80) {
+                System.out.println("Nome: " + dados[/*índice do nome*/] + ", Idade: " + idade + ", Overall: " + overall);
+            }
+        }
+    }
+}
