@@ -1,0 +1,38 @@
+package view;
+
+import controller.FifaController;
+import controller.IFifaController;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Stack;
+
+public class Principal {
+
+    public static void main(String[] args) {
+        IFifaController controller = new FifaController();
+        String caminho = "C:\\TEMP";
+        String nome = "data.csv";
+
+        try {
+            // Empilhar jogadores brasileiros
+            Stack<String> brasileiros = controller.empilhaBrasileiros(caminho, nome);
+            System.out.println("Jogadores Brasileiros empilhados.");
+
+            // Desempilhar e imprimir bons jogadores brasileiros
+            System.out.println("Desempilhando bons jogadores brasileiros (Overall > 80):");
+            controller.desmpilhaBonsBrasileiros(brasileiros);
+
+            // Listar revelações (idade <= 20)
+            List<String> revelacoes = controller.listaRevelacoes(caminho, nome);
+            System.out.println("Jogadores jovens listados.");
+
+            // Buscar e imprimir bons jovens (Overall > 80 e idade <= 20)
+            System.out.println("Buscando bons jogadores jovens (Overall > 80 e idade <= 20):");
+            controller.buscaListaBonsJovens(revelacoes);
+
+        } catch (IOException e) {
+            System.err.println("Erro ao processar o arquivo: " + e.getMessage());
+        }
+    }
+}
